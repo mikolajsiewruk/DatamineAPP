@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<HEAD>
+<META Name="DatamineScript" Content="Version3" charset = "UTF-8" />
+<TITLE>Command Automatically recorded html script.</TITLE>
+<SCRIPT TYPE="text/javascript">
+
+// ----------------------------------------------------------------------
+// Standard initialisation for Datamine Studio 3
+//
+var oDmApp= null;
+var oScript = null;
+var file = "holes1"
+
+
+function xd(){
+    //let x = document.forms["form1"]["name1"].value
+    document.getElementById("test").innerHTML = 'aaaa'
+    console.log("lololol")
+}
+function AutoConnect()
+{
+   try {
+      oScript = new ActiveXObject("StudioCommon.ScriptHelper");
+      oScript.initialize(window);
+      oDmApp = oScript.getApplication();
+      if (oDmApp == null || oDmApp.ActiveProject == null)    //Attempt to Use the Active Datamine Session
+      {
+         alert("There are no active projects open.\n Please open a project before continuing.");
+         window.close();                                                     // Closes the script window
+	 return false;
+      }
+      else
+      {
+         document.getElementById("logo").src = oDmApp.Options.HtmlFolder + "\\images\\Datamine_rgb_small.png";
+	 return true;
+      }
+   }
+   catch(e) {
+      alert("Failed\nReason: " + e.description);
+      if ( oDmApp) oDmApp.Quit(); // release the session to close it down
+   }
+   return false;
+}
+function btnExecute_onclick()
+{
+	try	{
+
+
+	;
+	oDmApp.ParseCommand("mgsort &IN=${file} &OUT=xd *KEY1=BHID @ORDER=1 @KEYSFRST=1 @ROWORDER=1 @KEYTOL=0.00001");
+	oDmApp.ParseCommand("mgsort &IN=${file} &OUT=holes1test *KEY1=ZSTART @ORDER=1 @KEYSFRST=1 @ROWORDER=1 @KEYTOL=0.00001");
+
+
+	}
+	catch(e) {
+		alert("Failed\nReason: " + e.description);
+	}
+}
+function btnHelp_onclick()
+{
+	var features = "status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+        var common = "_blank"
+	var installpath = oDmApp.Options.HelpFolder;
+	installpath = installpath.replace(" ", "%20");
+	var helpcommand = "mk:@MSITStore:" + installpath + "/DatamineStudio.chm::/Studio_3_General/Concept_Studio%203%20Scripting%20Overview.htm";
+	window.open(helpcommand, common, features);
+}
+</SCRIPT>
+</HEAD>
+<BODY onload="AutoConnect();" onunload="oDmApp = null;oScript = null;">
+<div>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td><b>test3</b>
+</td>
+<td></td>
+</tr>
+<tr>
+<td align="center" colspan="2"></td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<input type="button" value="Execute" name="btnExecute" onclick="return btnExecute_onclick()" style="width: 75px" />
+<input type="button" value="Help" name="btnHelp" onclick="return btnHelp_onclick()" style="width: 75px" />
+</td>
+</tr>
+</table>
+</div>
+<div id = "header" align="center">
+    <h1>Tworzenie powierzchni stropu warstw</h1>
+</div>
+<div id = "input" align="center">
+    <form id = "form1" method="post" onsubmit="xd()">
+        <label for ="name1">Podaj nazwę pliku odwiertów:</label>
+        <br>
+        <br>
+        <input type = "text" id = "name1">
+        <br>
+        <br>
+        <label for ="warstwa">Podaj numer warstwy:</label>
+        <br>
+        <br>
+        <input type ="number" id = "warstwa">
+        <br>
+        <br>
+        <input type = "submit">
+    </form>
+</div>
+<p id="test">XDXD</p>
+<button type="button" onclick="xd()">LOL</button>
+</BODY>
+</HTML>

@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<HTML>
+<HEAD>
+<META Name="DatamineScript" Content="Version3" />
+<TITLE>Command Automatically recorded html script.</TITLE>
+<SCRIPT TYPE="text/javascript">
+
+// ----------------------------------------------------------------------
+// Standard initialisation for Datamine Studio 3
+//
+var oDmApp= null;
+var oScript = null;
+document.addEventListener("DOMContentLoaded", function() {
+  const fileForm = document.getElementById("inputfiles");
+  const fileInputsContainer = document.getElementById("form1");
+  const addFileInputButton = document.getElementById("adds");
+
+  function addFileInput() {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.name = "files[]";
+    input.placeholder = "New sample";
+    fileInputsContainer.appendChild(input);
+  }
+
+  addFileInputButton.addEventListener("click", addFileInput);
+
+})
+
+function AutoConnect()
+{
+   try {
+      oScript = new ActiveXObject("StudioCommon.ScriptHelper");
+      oScript.initialize(window);
+      oDmApp = oScript.getApplication();
+      if (oDmApp == null || oDmApp.ActiveProject == null)    //Attempt to Use the Active Datamine Session
+      {
+         alert("There are no active projects open.\n Please open a project before continuing.");
+         window.close();                                                     // Closes the script window
+	 return false;
+      }
+      else
+      {
+         document.getElementById("logo").src = oDmApp.Options.HtmlFolder + "\\images\\Datamine_rgb_small.png";
+	 return true;
+      }
+   }
+   catch(e) {
+      alert("Failed\nReason: " + e.description);
+      if ( oDmApp) oDmApp.Quit(); // release the session to close it down
+   }
+   return false;
+}
+function btnExecute_onclick()
+{
+	try	{
+
+
+	;
+    const samples = []
+    const fileInputs = document.querySelectorAll("input[name='files[]']");
+    // fileInputs.forEach((input,index)=> {
+    //   const filename = input.value.trim()
+    //   samples.push(filename)
+    //   })
+    let collar = document.getElementById("collars").value
+    let litho = document.getElementById("litho").value
+    let assays = document.getElementById("assays").value
+    let output = document.getElementById("output").value
+    let commid =''
+    // samples.forEach((samp,index)=>{
+    //   commid+=`&SAMPLE${index+3} ${samp} `
+    //   console.log(commid)
+    // })
+    var com_end = " &OUT="+output+" &HOLESMRY=hsum_test &ERRORS=herr_test *BHID=BHID *XCOLLAR=XCOLLAR *YCOLLAR=YCOLLAR *ZCOLLAR=ZCOLLAR *FROM=FROM *TO=TO @SURVSMTH=1 @ENDPOINT=0 @DIPMETH=1 @INCLMISS=0 @KEEPNAME=1 @PROMPT=1 @PRINT=0"
+    var command = "holes3d &COLLAR="+collar+" &SAMPLE1="+litho+" &SAMPLE2="+assays+" "+commid+com_end
+    oDmApp.ParseCommand(command);
+
+
+	}
+	catch(e) {
+		alert("Failed\nReason: " + e.description);
+	}
+}
+function btnHelp_onclick()
+{
+	var features = "status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+        var common = "_blank"
+	var installpath = oDmApp.Options.HelpFolder;
+	installpath = installpath.replace(" ", "%20");
+	var helpcommand = "mk:@MSITStore:" + installpath + "/DatamineStudio.chm::/Studio_3_General/Concept_Studio%203%20Scripting%20Overview.htm";
+	window.open(helpcommand, common, features);
+}
+</SCRIPT>
+</HEAD>
+<BODY onload="AutoConnect();" onunload="oDmApp = null;oScript = null;">
+<div>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr>
+<td><b>test7_an</b>
+</td>
+<td><img src="C:/Program Files/Datamine/StudioRM//html/images/Datamine_rgb_small.png" id="logo" alt="Datamine" width="170" height="39" /></td>
+</tr>
+<tr>
+<td align="center" colspan="2"></td>
+</tr>
+<tr>
+<td align="center" colspan="2">
+<input type="button" value="Execute" name="btnExecute" onclick="return btnExecute_onclick()" style="width: 75px" />
+<input type="button" value="Help" name="btnHelp" onclick="return btnHelp_onclick()" style="width: 75px" />
+</td>
+</tr>
+</table>
+</div>
+    <form id="inputfiles">
+      <label for="collars">Podaj plik kołnierzy odwiertów</label>
+      <input type="text" id="collars" placeholder="Collars">
+      <input type="text" id="litho" placeholder="litho">
+      <input type="text" id="assays" placeholder="assays">
+      <input type="text" id="output" placeholder="output file">
+      <div id="form1"></div>
+      <button type="button" id="adds">More samples</button>
+    </form>
+</BODY>
+</HTML>

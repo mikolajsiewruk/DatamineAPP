@@ -1,6 +1,26 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html lang="en">
+<HTML>
 <HEAD>
+<style>
+    body {
+        background-color: rgb(237, 255, 239);
+        font-family: Calibri;
+    }
+    #btnExecute,#btnHelp {
+      width: 90px;
+      background-color: rgb(237, 255, 239);
+      color: black;
+      border: 2px solid green;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+        font-weight: bold;
+    }
+    #help{
+        color: rgb(237, 255, 239);
+    }
+</style>
 <META Name="DatamineScript" Content="Version3" charset = "UTF-8" />
 <TITLE>Command Automatically recorded html script.</TITLE>
 <SCRIPT TYPE="text/javascript">
@@ -10,14 +30,7 @@
 //
 var oDmApp= null;
 var oScript = null;
-var file = "holes1"
-
-
-function xd(){
-    //let x = document.forms["form1"]["name1"].value
-    document.getElementById("test").innerHTML = 'aaaa'
-    console.log("lololol")
-}
+var a = 0
 function AutoConnect()
 {
    try {
@@ -48,8 +61,26 @@ function btnExecute_onclick()
 
 
 	;
-	oDmApp.ParseCommand("mgsort &IN=${file} &OUT=xd *KEY1=BHID @ORDER=1 @KEYSFRST=1 @ROWORDER=1 @KEYTOL=0.00001");
-	oDmApp.ParseCommand("mgsort &IN=${file} &OUT=holes1test *KEY1=ZSTART @ORDER=1 @KEYSFRST=1 @ROWORDER=1 @KEYTOL=0.00001");
+    let input = document.forms["form1"]["name1"].value
+    let output = document.forms["form1"]["outputfile"].value
+    let wireframe = document.forms["form1"]["warstwa"].value
+    let color = document.forms["form1"]["color"].value
+    var outTR = output+"TR"
+    var outPT = output+"PT"
+    var command1 = "mgsort &IN="+input+" &OUT=holes1test *KEY1=BHID *KEY2=ZSTART @ORDER=2 @KEYSFRST=1 @ROWORDER=1 @KEYTOL=0.00001"
+    var command2 = "picrec &IN=holes1test &OUT=hminus1test @APPEND=0 {ZONE >"+wireframe+"}"
+    var command3 = "wftrend &POINTIN=hstart2test &WIRETR="+outTR+" &WIREPT="+outPT+" *XPT=XSTART *YPT=YSTART *ZPT=ZSTART @EXTN=200 @GRIDINC=100 @COLOURTR=0 @COLOUR1="+color+" "
+	oDmApp.ParseCommand(command1);
+	oDmApp.ParseCommand(command2+
+	 " 'END'");
+	oDmApp.ParseCommand("extra &IN=hminus1test &OUT=top2test1 @APPROX=0 @PRINT=0"+
+	 "'TEST = 0'"+
+	 "'IF (BHID!=prev(BHID))'"+
+	 "'   TEST = 1'"+
+	 "'END'"+"'GO'")
+	 oDmApp.ParseCommand("picrec &IN=top2test1 &OUT=hstart2test @APPEND=0 {TEST = 1}"+
+	 " 'END'");
+	oDmApp.ParseCommand(command3);
 
 
 	}
@@ -59,30 +90,37 @@ function btnExecute_onclick()
 }
 function btnHelp_onclick()
 {
-	var features = "status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
-        var common = "_blank"
-	var installpath = oDmApp.Options.HelpFolder;
-	installpath = installpath.replace(" ", "%20");
-	var helpcommand = "mk:@MSITStore:" + installpath + "/DatamineStudio.chm::/Studio_3_General/Concept_Studio%203%20Scripting%20Overview.htm";
-	window.open(helpcommand, common, features);
+    let x = document.getElementById("help")
+    a = a +1
+    if (a%2==1){
+        x.style.color = "#000000"
+    }
+    else{
+        x.style.color = "#edffef"
+    }
+	// var features = "status=no,toolbar=no,menubar=no,location=no,scrollbars=yes,resizable=yes";
+    //     var common = "_blank"
+	// var installpath = oDmApp.Options.HelpFolder;
+	// installpath = installpath.replace(" ", "%20");
+	// var helpcommand = "mk:@MSITStore:" + installpath + "/DatamineStudio.chm::/Studio_3_General/Concept_Studio%203%20Scripting%20Overview.htm";
+	// window.open(helpcommand, common, features);
 }
+
 </SCRIPT>
 </HEAD>
 <BODY onload="AutoConnect();" onunload="oDmApp = null;oScript = null;">
-<div>
+<div align="center">
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>
-<td><b>test3</b>
-</td>
-<td></td>
+<td><img src="C:/Program Files/Datamine/StudioRM//html/images/Datamine_rgb_small.png" id="logo" alt="Datamine" width="170" height="39" /></td>
 </tr>
 <tr>
 <td align="center" colspan="2"></td>
 </tr>
 <tr>
 <td align="center" colspan="2">
-<input type="button" value="Execute" name="btnExecute" onclick="return btnExecute_onclick()" style="width: 75px" />
-<input type="button" value="Help" name="btnHelp" onclick="return btnHelp_onclick()" style="width: 75px" />
+<input type="button" value="Execute" id="btnExecute" name="btnExecute" onclick="return btnExecute_onclick()" />
+<input type="button" value="Help" id="btnHelp" name="btnHelp" onclick="return btnHelp_onclick()" />
 </td>
 </tr>
 </table>
@@ -104,10 +142,34 @@ function btnHelp_onclick()
         <input type ="number" id = "warstwa">
         <br>
         <br>
-        <input type = "submit">
+        <label for ="outputfile">Nazwa pliku wyjściowego:</label>
+        <br>
+        <br>
+        <input type="text" id="outputfile">
+        <br>
+        <br>
+        <label for ="color">Kolor stropu (1-64):</label>
+        <br>
+        <br>
+        <input type="text" id="color">
     </form>
 </div>
-<p id="test">XDXD</p>
-<button type="button" onclick="xd()">LOL</button>
+<div id="help">
+    <h3>HELP Menu</h3>
+    <ol id="helptext">
+        <li>
+            Plik wejściowy (tekst) - plik zawierający dane próbek w odwiertach takie jak numer warstwy,współrzędne X,Y,Z i inne parametry odwiertu.
+        </li>
+        <li>
+            Numer warstwy (liczba naturalna) - numer warstwy, dla której sporządzony ma być model stropu.
+        </li>
+        <li>
+            Plik wyjściowy (tekst) - nazwa pliku, pod którą zostanie zapisany model triangulacji stropu warstwy w postacji plików TR i PT.
+        </li>
+        <li>
+            Kod koloru (liczba naturalna [1:64]) - kolor powierzchni stropu.
+        </li>
+    </ol>
+</div>
 </BODY>
 </HTML>

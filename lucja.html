@@ -10,23 +10,6 @@
 //
 var oDmApp= null;
 var oScript = null;
-document.addEventListener("DOMContentLoaded", function() {
-  const fileForm = document.getElementById("inputfiles");
-  const fileInputsContainer = document.getElementById("form1");
-  const addFileInputButton = document.getElementById("adds");
-
-  function addFileInput() {
-    const input = document.createElement("input");
-    input.type = "text";
-    input.name = "files[]";
-    input.placeholder = "New sample";
-    fileInputsContainer.appendChild(input);
-  }
-
-  addFileInputButton.addEventListener("click", addFileInput);
-
-})
-
 function AutoConnect()
 {
    try {
@@ -57,24 +40,10 @@ function btnExecute_onclick()
 
 
 	;
-    const samples = []
-    const fileInputs = document.querySelectorAll("input[name='files[]']");
-    // fileInputs.forEach((input,index)=> {
-    //   const filename = input.value.trim()
-    //   samples.push(filename)
-    //   })
-    let collar = document.getElementById("collars").value
-    let litho = document.getElementById("litho").value
-    let assays = document.getElementById("assays").value
-    let output = document.getElementById("output").value
-    let commid =''
-    // samples.forEach((samp,index)=>{
-    //   commid+=`&SAMPLE${index+3} ${samp} `
-    //   console.log(commid)
-    // })
-    var com_end = " &OUT="+output+" &HOLESMRY=hsum_test &ERRORS=herr_test *BHID=BHID *XCOLLAR=XCOLLAR *YCOLLAR=YCOLLAR *ZCOLLAR=ZCOLLAR *FROM=FROM *TO=TO @SURVSMTH=1 @ENDPOINT=0 @DIPMETH=1 @INCLMISS=0 @KEEPNAME=1 @PROMPT=1 @PRINT=0"
-    var command = "holes3d &COLLAR="+collar+" &SAMPLE1="+litho+" &SAMPLE2="+assays+" "+commid+com_end
-    oDmApp.ParseCommand(command);
+    let input = document.getElementById("file").value;
+    let output = document.getElementById("output").value;
+    let command = "stats &IN="+input+" &OUT="+output+" @KEYSORT=1 @KEYTOL=0.00001 @PCNTILES=0 @SORTOUT=1 @PRINT=0";
+	oDmApp.ParseCommand(command);
 
 
 	}
@@ -97,7 +66,7 @@ function btnHelp_onclick()
 <div>
 <table border="0" cellpadding="5" cellspacing="0">
 <tr>
-<td><b>test7_an</b>
+<td><b>test8_lu1</b>
 </td>
 <td><img src="C:/Program Files/Datamine/StudioRM//html/images/Datamine_rgb_small.png" id="logo" alt="Datamine" width="170" height="39" /></td>
 </tr>
@@ -112,14 +81,11 @@ function btnHelp_onclick()
 </tr>
 </table>
 </div>
-    <form id="inputfiles">
-      <label for="collars">Podaj plik kołnierzy odwiertów</label>
-      <input type="text" id="collars" placeholder="Collars">
-      <input type="text" id="litho" placeholder="litho">
-      <input type="text" id="assays" placeholder="assays">
-      <input type="text" id="output" placeholder="output file">
-      <div id="form1"></div>
-      <button type="button" id="adds">More samples</button>
+<div>
+    <form id="stat">
+        <input type="text" id="file" placeholder="Plik wejściowy">
+        <input type="text" id="output" placeholder="Plik wyjściowy">
     </form>
+</div>
 </BODY>
 </HTML>

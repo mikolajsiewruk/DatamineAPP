@@ -91,35 +91,97 @@ function btnHelp_onclick()
 	var helpcommand = "mk:@MSITStore:" + installpath + "/DatamineStudio.chm::/Studio_3_General/Concept_Studio%203%20Scripting%20Overview.htm";
 	window.open(helpcommand, common, features);
 }
-</SCRIPT>
-</HEAD>
-<BODY onload="AutoConnect();" onunload="oDmApp = null;oScript = null;">
-<div>
-<table border="0" cellpadding="5" cellspacing="0">
-<tr>
-<td><b>test7_an</b>
-</td>
-<td><img src="C:/Program Files/Datamine/StudioRM//html/images/Datamine_rgb_small.png" id="logo" alt="Datamine" width="170" height="39" /></td>
-</tr>
-<tr>
-<td align="center" colspan="2"></td>
-</tr>
-<tr>
-<td align="center" colspan="2">
-<input type="button" value="Execute" name="btnExecute" onclick="return btnExecute_onclick()" style="width: 75px" />
-<input type="button" value="Help" name="btnHelp" onclick="return btnHelp_onclick()" style="width: 75px" />
-</td>
-</tr>
-</table>
-</div>
-    <form id="inputfiles">
-      <label for="collars">Podaj plik kołnierzy odwiertów</label>
-      <input type="text" id="collars" placeholder="Collars">
-      <input type="text" id="litho" placeholder="litho">
-      <input type="text" id="assays" placeholder="assays">
-      <input type="text" id="output" placeholder="output file">
-      <div id="form1"></div>
-      <button type="button" id="adds">More samples</button>
-    </form>
-</BODY>
-</HTML>
+</SCRIPT
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datamine</title>
+    <style>
+            body {
+            background-color: #f2e6f5;
+            color: #800080;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            width: 60%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        input[type="text"], button {
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #800080;
+            border-radius: 8px;
+            width: 45%;
+            box-sizing: border-box;
+        }
+        input[type="button"] {
+            background-color: #FF8BE7;
+            color: #ffffff;
+            border: none;
+            width: 15%;
+            padding: 7px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="button"]:hover {
+            background-color: #ff66cc;
+        }
+        #adds {
+            background-color: #FF94E4;
+            color: #ffffff;
+            border: none;
+            width: 45%;
+            padding: 18px 25px;
+            font-size: 18px;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        #adds:hover {
+            background-color: #FF79FC;
+        }
+        #logo {
+            margin: 20px auto;
+            display: block;
+        }
+        .centered {
+            text-align: center;
+        }
+        h1 {
+            color: #BD2C7C;
+	    font-size: 22px;
+        }
+</style>
+</head>
+<body onload="AutoConnect();" onunload="oDmApp = null;oScript = null;">
+    <div id="container">
+        <img src="C:/Program Files/Datamine/StudioRM//html/images/Datamine_rgb_small.png" id="logo" alt="Datamine" width="180" height="50" />
+        <div class="centered">
+            <input type="button" value="Execute" name="btnExecute" onclick="return btnExecute_onclick()" />
+            <input type="button" value="Help" name="btnHelp" onclick="return btnHelp_onclick()" />
+	<h1>Tworzenie zbioru próbek</h1>
+        </div>
+        <form id="inputfiles">
+            <input type="text" id="Collars" placeholder="Collars"><br>
+            <input type="text" id="Litho" placeholder="litho"><br>
+            <input type="text" id="Assays" placeholder="assays"><br>
+            <input type="text" id="Output" placeholder="output file"><br>
+            <div id="form1"></div>
+        </form>
+        <button type="button" id="adds">More samples</button>
+    </div>
+
+    <script>
+        function btnHelp_onclick() {
+            alert("Instrukcja: \n1. Podaj nazwę zbioru współrzędnych kryz odwiertów\n2. Podaj nazwę pliku litho\n3. Podaj nazwę pliku próbek\n4. Podaj nazwę pliku wynikowego");
+        }
+    </script>
+</body>
+</html>
